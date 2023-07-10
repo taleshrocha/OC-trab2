@@ -1,8 +1,4 @@
-//Serve para ativar o "send" do buffer necessário, entrando os 4 outros árbitros e saindo para ativar a leitura do buffer para a saída necessária do roteador
-
-#include "systemc.h"
-#include <iostream>
-#include <bitset>
+#include <systemc>
 
 SC_MODULE(myor) {
   sc_in<bool> A, B, C;

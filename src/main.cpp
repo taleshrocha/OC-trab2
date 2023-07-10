@@ -1,6 +1,3 @@
-#include <systemc>
-#include <iostream>
-
 #include "definitions.hpp"
 #include "testbench.cpp"
 #include "modules/roteador.h"

@@ -1,5 +1,5 @@
-#include "definitions.hpp"
 #include "systemc.h"
+#include "definitions.hpp"
 
 SC_MODULE(testbench) {
     sc_in<bool> Clk;
@@ -12,7 +12,6 @@ SC_MODULE(testbench) {
 
     void TbGen() {
 
-        // Pacote da Direita para a esquerda
         FLIT vdn[6] = {"100001", "110000", "010100", "001000", "000100", "000010"};
 
         dD1.write(vdn[0]);
