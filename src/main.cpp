@@ -5,11 +5,9 @@
 int sc_main(int argc, char* argv[]) {
   sc_clock clock("clock", 100, SC_NS, 0.5);
 
-  //Instanciando roteador, componentes de teste e o testbench
   roteador rot("roteador");
   testbench Tb("testbench");
 
-  //Instanciando fios
   sc_signal<bool> eD, eE, eL, eF;
 
   sc_signal<FLIT> dD1, dD2, dD3, dD4, dD5, dD6;
@@ -19,7 +17,6 @@ int sc_main(int argc, char* argv[]) {
 
   sc_signal<FLIT> doD, doE, doL, doF;
 
-  //Conectando fios
   rot.clk(clock);
   Tb.Clk(clock);
 
