@@ -3,29 +3,30 @@
 
 SC_MODULE(testbench) {
     sc_in<bool> Clk;
-    sc_out<bool> dN1[6], dN2[6], dN3[6], dN4[6], dN5[6], dN6[6], dN7[6], dN8[6];
-    sc_out<bool> dS1[6], dS2[6], dS3[6], dS4[6], dS5[6], dS6[6], dS7[6], dS8[6];
-    sc_out<bool> dL1[6], dL2[6], dL3[6], dL4[6], dL5[6], dL6[6], dL7[6], dL8[6];
-    sc_out<bool> dO1[6], dO2[6], dO3[6], dO4[6], dO5[6], dO6[6], dO7[6], dO8[6];
-    sc_out<bool> dC1[6], dC2[6], dC3[6], dC4[6], dC5[6], dC6[6], dC7[6], dC8[6];
+
+    sc_out<FLIT> dN1, dN2, dN3, dN4, dN5, dN6, dN7, dN8;
+    sc_out<FLIT> dS1, dS2, dS3, dS4, dS5, dS6, dS7, dS8;
+    sc_out<FLIT> dL1, dL2, dL3, dL4, dL5, dL6, dL7, dL8;
+    sc_out<FLIT> dO1, dO2, dO3, dO4, dO5, dO6, dO7, dO8;
+    sc_out<FLIT> dC1, dC2, dC3, dC4, dC5, dC6, dC7, dC8;
     sc_out<bool> eN, eS, eL, eO, eC;
 
     void TbGen() {
+
         //pacote (8 flits) para o sul
-        bool vdn[8][6] = {{true, false, false, false, false, true}, {true, true, false, false, false, false}, {false, false, true, true, false, false}, {true, false, true, false, false, false}, {false, true, false, true, false, false}, {false, false, true, false, false, false}, {false, false, false, true, false, false}, {false, false, false, false, true, false}};
+        FLIT vdn[8] = {"100001", "110000", "001100", "101000", "010100", 
+            "001000", "000100", "000010"};
 
         //Envio dos dados
-        for(short x = 0; x < 6; x++) {
-            //Norte
-            dN1[x].write(vdn[0][x]);
-            dN2[x].write(vdn[1][x]);
-            dN3[x].write(vdn[2][x]);
-            dN4[x].write(vdn[3][x]);
-            dN5[x].write(vdn[4][x]);
-            dN6[x].write(vdn[5][x]);
-            dN7[x].write(vdn[6][x]);
-            dN8[x].write(vdn[7][x]);
-        }
+        //Norte
+        dN1.write(vdn[0]);
+        dN2.write(vdn[1]);
+        dN3.write(vdn[2]);
+        dN4.write(vdn[3]);
+        dN5.write(vdn[4]);
+        dN6.write(vdn[5]);
+        dN7.write(vdn[6]);
+        dN8.write(vdn[7]);
 
         eN.write(true);
         eS.write(true);

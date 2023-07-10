@@ -1,5 +1,5 @@
 $date
-     Jul 10, 2023       11:45:45
+     Jul 10, 2023       13:58:12
 $end
 
 $version
@@ -12,18 +12,10 @@ $end
 
 $scope module SystemC $end
 $var wire    1  aaaaa  clock       $end
-$var wire    1  aaaab  router|dataOutS|5       $end
-$var wire    1  aaaac  router|dataOutS|4       $end
-$var wire    1  aaaad  router|dataOutS|3       $end
-$var wire    1  aaaae  router|dataOutS|2       $end
-$var wire    1  aaaaf  router|dataOutS|1       $end
-$var wire    1  aaaag  router|dataOutS|0       $end
-$var wire    1  aaaah  router|dataInN1|5       $end
-$var wire    1  aaaai  router|dataInN1|4       $end
-$var wire    1  aaaaj  router|dataInN1|3       $end
-$var wire    1  aaaak  router|dataInN1|2       $end
-$var wire    1  aaaal  router|dataInN1|1       $end
-$var wire    1  aaaam  router|dataInN1|0       $end
+$var wire    6  aaaab  router|dataOutS [5:0]  $end
+$var wire    6  aaaac  router|dataOutN [5:0]  $end
+$var wire    6  aaaad  router|dataInS1 [5:0]  $end
+$var wire    6  aaaae  router|dataInN1 [5:0]  $end
 $upscope $end
 $enddefinitions  $end
 
@@ -33,18 +25,10 @@ $end
 
 $dumpvars
 1aaaaa
-0aaaab
-0aaaac
-0aaaad
-0aaaae
-0aaaaf
-0aaaag
-1aaaah
-0aaaai
-0aaaaj
-0aaaak
-0aaaal
-1aaaam
+b0 aaaab
+b0 aaaac
+b0 aaaad
+b100001 aaaae
 $end
 
 #50
@@ -70,55 +54,39 @@ $end
 
 #400
 1aaaaa
-1aaaab
-1aaaag
+b100001 aaaab
 
 #450
 0aaaaa
 
 #500
 1aaaaa
-0aaaab
-1aaaaf
+b110000 aaaab
 
 #550
 0aaaaa
-1aaaad
-1aaaae
-0aaaaf
-0aaaag
+b1100 aaaab
 
 #600
 1aaaaa
-0aaaad
-1aaaag
+b101000 aaaab
 
 #650
 0aaaaa
-1aaaad
-0aaaae
-1aaaaf
-0aaaag
+b10100 aaaab
 
 #700
 1aaaaa
-0aaaad
-1aaaae
-0aaaaf
+b0 aaaab
 
 #750
 0aaaaa
-1aaaad
-0aaaae
 
 #800
 1aaaaa
-1aaaac
-0aaaad
 
 #850
 0aaaaa
-0aaaac
 
 #900
 1aaaaa
