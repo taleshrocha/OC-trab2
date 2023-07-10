@@ -1,5 +1,5 @@
 $date
-     Jul 10, 2023       15:27:48
+     Jul 10, 2023       15:50:34
 $end
 
 $version
@@ -65,15 +65,15 @@ b110000 aaaab
 
 #550
 0aaaaa
-b1100 aaaab
+b10100 aaaab
 
 #600
 1aaaaa
-b101000 aaaab
+b1000 aaaab
 
 #650
 0aaaaa
-b10100 aaaab
+b100 aaaab
 
 #700
 1aaaaa

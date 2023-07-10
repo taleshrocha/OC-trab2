@@ -8,7 +8,7 @@ SC_MODULE(buffer) {
   sc_in<bool> clk;
 
   //Flits do pacote para o buffer receber, setado manualmente durante o teste
-  sc_in<FLIT> dataIn1, dataIn2, dataIn3, dataIn4, dataIn5, dataIn6, dataIn7, dataIn8; 
+  sc_in<FLIT> dataIn1, dataIn2, dataIn3, dataIn4, dataIn5, dataIn6; 
 
   //Dados para o buffer enviar
   sc_out<FLIT> dataOut; 
@@ -21,9 +21,9 @@ SC_MODULE(buffer) {
 
   //Serve para indicar o número de posições já ocupadas, não usado em teste,
   //desde que terá já instanciado os dados nos buffers
-  short pos = 7; 
+  short pos =5; 
 
-  FLIT dados[8] = {"000000", "000000", "000000", "000000", "000000", "000000", "000000", "000000"};
+  FLIT dados[6] = {"000000", "000000", "000000", "000000", "000000", "000000"};
 
   void do_buffer() {
     dataOut.write(dados[0]);
@@ -46,8 +46,6 @@ SC_MODULE(buffer) {
       dados[3] = dataIn4.read();
       dados[4] = dataIn5.read();
       dados[5] = dataIn6.read();
-      dados[6] = dataIn7.read();
-      dados[7] = dataIn8.read();
     }
   }
 

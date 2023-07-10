@@ -9,10 +9,10 @@
 SC_MODULE(roteador) {
   sc_in<bool> clk;
 
-  sc_in<FLIT> dataInD1, dataInD2, dataInD3, dataInD4, dataInD5, dataInD6, dataInD7, dataInD8;
-  sc_in<FLIT> dataInE1, dataInE2, dataInE3, dataInE4, dataInE5, dataInE6, dataInE7, dataInE8;
-  sc_in<FLIT> dataInF1, dataInF2, dataInF3, dataInF4, dataInF5, dataInF6, dataInF7, dataInF8;
-  sc_in<FLIT> dataInL1, dataInL2, dataInL3, dataInL4, dataInL5, dataInL6, dataInL7, dataInL8;
+  sc_in<FLIT> dataInD1, dataInD2, dataInD3, dataInD4, dataInD5, dataInD6;
+  sc_in<FLIT> dataInE1, dataInE2, dataInE3, dataInE4, dataInE5, dataInE6;
+  sc_in<FLIT> dataInF1, dataInF2, dataInF3, dataInF4, dataInF5, dataInF6;
+  sc_in<FLIT> dataInL1, dataInL2, dataInL3, dataInL4, dataInL5, dataInL6;
 
   //Para ativar o enable pela testbench para escrita
   sc_in<bool> enableD, enableE, enableF, enableL;
@@ -121,8 +121,6 @@ SC_MODULE(roteador) {
     bD.dataIn4(dataInD4);
     bD.dataIn5(dataInD5);
     bD.dataIn6(dataInD6);
-    bD.dataIn7(dataInD7);
-    bD.dataIn8(dataInD8);
 
     //Recebe flits para saber se é cabeçalho e para onde vai
     rD.dataIn(bDo);
@@ -160,8 +158,6 @@ SC_MODULE(roteador) {
     bE.dataIn4(dataInE4);
     bE.dataIn5(dataInE5);
     bE.dataIn6(dataInE6);
-    bE.dataIn7(dataInE7);
-    bE.dataIn8(dataInE8);
 
     rE.dataIn(bEo);//Recebe flits para saber se é cabeçalho e para onde vai
     rE.clk(clk);
@@ -170,10 +166,14 @@ SC_MODULE(roteador) {
     mE.X1(aEm1);
     mE.X2(aEm2);
     mE.X3(aEm3);
-    mE.A(bDo);//Recebe flits do buffer norte
-    mE.B(bLo);//Recebe flits do buffer leste
-    mE.C(bFo);//Recebe flits do buffer oeste
-    mE.res(dataOutE);//Eaída dos flits pelo mux sul
+
+    //Recebe flits do buffer
+    mE.A(bDo); 
+    mE.B(bLo);
+    mE.C(bFo);
+
+    //Eaída dos flits pelo mux 
+    mE.res(dataOutE);
 
     oE.A(aDe1);//Recebe sinal para ler arquivos no buffer sul do árbitro norte
     oE.B(aLe2);//Recebe sinal para ler arquivos no buffer sul do árbitro leste
@@ -197,8 +197,6 @@ SC_MODULE(roteador) {
     bL.dataIn4(dataInL4);
     bL.dataIn5(dataInL5);
     bL.dataIn6(dataInL6);
-    bL.dataIn7(dataInL7);
-    bL.dataIn8(dataInL8);
 
     rL.dataIn(bLo);//Recebe flits para saber se é cabeçalho e para onde vai
     rL.clk(clk);
@@ -234,8 +232,6 @@ SC_MODULE(roteador) {
     bF.dataIn4(dataInF4);
     bF.dataIn5(dataInF5);
     bF.dataIn6(dataInF6);
-    bF.dataIn7(dataInF7);
-    bF.dataIn8(dataInF8);
 
     rF.dataIn(bFo);//Recebe flits para saber se é cabeçalho e para onde vai
     rF.clk(clk);
