@@ -1,0 +1,14 @@
+- Tamanho dos canais;  
+6 bits
+
+- Tamanho dos buffers;  
+8 flits (8 * 6 bits)
+
+- Política de roteamento:  
+Determinístico XY
+
+- Política de arbitragem;  
+Round-robin
+
+- Controle de fluxo: 
+handshake
