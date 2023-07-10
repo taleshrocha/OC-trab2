@@ -1,5 +1,5 @@
 $date
-     Jul 10, 2023       13:58:12
+     Jul 10, 2023       15:27:48
 $end
 
 $version
@@ -12,10 +12,10 @@ $end
 
 $scope module SystemC $end
 $var wire    1  aaaaa  clock       $end
-$var wire    6  aaaab  router|dataOutS [5:0]  $end
-$var wire    6  aaaac  router|dataOutN [5:0]  $end
-$var wire    6  aaaad  router|dataInS1 [5:0]  $end
-$var wire    6  aaaae  router|dataInN1 [5:0]  $end
+$var wire    6  aaaab  router|dataOutE [5:0]  $end
+$var wire    6  aaaac  router|dataOutD [5:0]  $end
+$var wire    6  aaaad  router|dataInE1 [5:0]  $end
+$var wire    6  aaaae  router|dataInD1 [5:0]  $end
 $upscope $end
 $enddefinitions  $end
 

@@ -18,7 +18,7 @@ SC_MODULE(roteia) {
   sc_in<FLIT> dataIn; 
 
    //Manda a requisição necessária para o arbitro correto
-  sc_out<bool> L, O, N, S, C;
+  sc_out<bool> D, E, L, F;
   
   void do_roteia(){
     FLIT dataInAux = dataIn.read();
@@ -40,21 +40,20 @@ SC_MODULE(roteia) {
           } else { //Se não, requisitemos o Sul
           	req[1] = true;
           }
-        } else { //Yval = 0, então encontramos o roteador destino, envie para a porta local/central
-          req[4] = true;
-        }
+        } 
+        //else { //Yval = 0, então encontramos o roteador destino, envie para a porta local/central
+        //  req[4] = true;
+        //}
       }
     }
-    N.write(req[0]);
-    S.write(req[1]);
+    D.write(req[0]);
+    E.write(req[1]);
     L.write(req[2]);
-    O.write(req[3]);
-    C.write(req[4]);
+    F.write(req[3]);
   }
   
   SC_CTOR(roteia) 
-  : clk("clk"), dataIn("dataIn"), L("L"), O("O"), N("N"), S("S"), C("C")
-  {
+  : clk("clk"), dataIn("dataIn"), D("D"), E("E"), L("L"), F("F") {
     SC_METHOD(do_roteia);
     sensitive << clk;
   }

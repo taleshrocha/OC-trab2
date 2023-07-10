@@ -6,7 +6,7 @@
 SC_MODULE(circbuffer) {
   sc_in<bool> clk;
   sc_in<bool> advance; //Receba do árbitro o comando para avançar para a próxima posição no buffer circular
-  sc_in<bool> reqIn1, reqIn2, reqIn3, reqIn4; //requisições dos "roteia" instanciados das 4 direções
+  sc_in<bool> reqIn1, reqIn2, reqIn3; //requisições dos "roteia" instanciados das 4 direções
   sc_out<bool> reqOut; //Avisa para o árbitro se há uma requisição nessa posição atual
   sc_out<short> posOut; //Valor do ponteiro/posição atual para uso do árbitro
   
@@ -28,7 +28,6 @@ SC_MODULE(circbuffer) {
       reqs[0] = reqIn1.read();
       reqs[1] = reqIn2.read();
       reqs[2] = reqIn3.read();
-      reqs[3] = reqIn4.read();
     }
     
     //Envia a posição
@@ -36,7 +35,9 @@ SC_MODULE(circbuffer) {
     reqOut.write(reqs[pont]);
   }
   
-  SC_CTOR(circbuffer) : advance("adv"), reqIn1("rI1"), reqIn2("rI2"), reqIn3("rI3"), reqIn4("rI4"), reqOut("rO"), posOut("pO") {
+  SC_CTOR(circbuffer) 
+  : advance("adv"), reqIn1("rI1"), reqIn2("rI2"), reqIn3("rI3"), 
+    reqOut("rO"), posOut("pO") {
     SC_METHOD(do_circbuffer);
     sensitive << clk.pos();
   }

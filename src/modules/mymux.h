@@ -4,7 +4,7 @@
 
 SC_MODULE(mymux) {
   sc_in<bool> clk;
-  sc_in<FLIT> A, B, C, D;
+  sc_in<FLIT> A, B, C;
   sc_in<bool> X1, X2, X3;
   sc_out<FLIT> res;
   sc_out<bool> eop;
@@ -13,9 +13,8 @@ SC_MODULE(mymux) {
 
   void do_mymux() {
     FLIT aValue = A.read();
-    FLIT cValue = C.read();
     FLIT bValue = B.read();
-    FLIT dValue = D.read();
+    FLIT cValue = C.read();
 
     if (X1.read() == false) { // Estou recebendo flit
       if (X3.read() == false) {
@@ -30,10 +29,11 @@ SC_MODULE(mymux) {
         if (X2.read() == false) {
           eopS = (bool) bValue[4];
           res.write(bValue);
-        } else {
-          eopS = (bool) dValue[4];
-          res.write(dValue);
-        }
+        } 
+        //else {
+        //  eopS = (bool) dValue[4];
+        //  res.write(dValue);
+        //}
       }
     } else { // Não estou recebendo flit
       eopS = false;

@@ -9,208 +9,185 @@
 SC_MODULE(roteador) {
   sc_in<bool> clk;
 
-  sc_in<FLIT> dataInN1, dataInN2, dataInN3, dataInN4, dataInN5, dataInN6, dataInN7, dataInN8;
-  sc_in<FLIT> dataInS1, dataInS2, dataInS3, dataInS4, dataInS5, dataInS6, dataInS7, dataInS8;
+  sc_in<FLIT> dataInD1, dataInD2, dataInD3, dataInD4, dataInD5, dataInD6, dataInD7, dataInD8;
+  sc_in<FLIT> dataInE1, dataInE2, dataInE3, dataInE4, dataInE5, dataInE6, dataInE7, dataInE8;
+  sc_in<FLIT> dataInF1, dataInF2, dataInF3, dataInF4, dataInF5, dataInF6, dataInF7, dataInF8;
   sc_in<FLIT> dataInL1, dataInL2, dataInL3, dataInL4, dataInL5, dataInL6, dataInL7, dataInL8;
-  sc_in<FLIT> dataInO1, dataInO2, dataInO3, dataInO4, dataInO5, dataInO6, dataInO7, dataInO8;
-  sc_in<FLIT> dataInC1, dataInC2, dataInC3, dataInC4, dataInC5, dataInC6, dataInC7, dataInC8;
 
   //Para ativar o enable pela testbench para escrita
-  sc_in<bool> enableN, enableS, enableL, enableO, enableC; 
+  sc_in<bool> enableD, enableE, enableF, enableL;
 
-  sc_out<FLIT> dataOutN, dataOutS, dataOutL, dataOutO, dataOutC;
+  sc_out<FLIT> dataOutD, dataOutE, dataOutF, dataOutL;
 
-  buffer bN, bS, bL, bO, bC;
-  roteia rN, rS, rL, rO, rC;
-  arbitro aN, aS, aL, aO, aC;
-  mymux mN, mS, mL, mO, mC;
-  myor oN, oS, oL, oO, oC;
+  buffer bD, bE, bL, bF;
+  roteia rD, rE, rL, rF;
+  arbitro aD, aE, aL, aF;
+  mymux mD, mE, mL, mF;
+  myor oD, oE, oL, oF;
 
-  sc_signal<bool> oNr, oSr, oLr, oOr, oCr;
-  sc_signal<FLIT> bNo, bSo, bLo, bOo, bCo;
-  sc_signal<bool> aNm1, aNm2, aNm3, aSm1, aSm2, aSm3, aLm1, aLm2, aLm3, aOm1, aOm2, aOm3, aCm1, aCm2, aCm3;
-  sc_signal<bool> aNe1, aNe2, aNe3, aNe4, aSe1, aSe2, aSe3, aSe4, aLe1, aLe2, aLe3, aLe4, aOe1, aOe2, aOe3, aOe4, aCe1, aCe2, aCe3, aCe4;
-  sc_signal<bool> mNeop, mSeop, mLeop, mOeop, mCeop;
-  sc_signal<bool> rNs, rNl, rNo, rNc, rSn, rSl, rSo, rSc, rLs, rLn, rLo, rLc, rOs, rOl, rOn, rOc, rCs, rCl, rCo, rCn;
+  sc_signal<bool> oDr, oEr, oLr, oFr;
+  sc_signal<FLIT> bDo, bEo, bLo, bFo;
+  sc_signal<bool> aDm1, aDm2, aDm3, aEm1, aEm2, aEm3, aLm1, aLm2, aLm3, aFm1, aFm2, aFm3;
+  sc_signal<bool> aDe1, aDe2, aDe3, aDe4, aEe1, aEe2, aEe3, aEe4, aLe1, aLe2, aLe3, aLe4, aFe1, aFe2, aFe3, aFe4;
+  sc_signal<bool> mDeop, mEeop, mLeop, mFeop;
+  sc_signal<bool> rDs, rDl, rDo, rDc, rEn, rEl, rEo, rEc, rLs, rLn, rLo, rLc, rFs, rFl, rFn, rFc;
 
-  sc_signal<bool> rNn, rSs, rLl, rOo, rCc; // Inuteis mas necessários para funcionar
+  sc_signal<bool> rDn, rEs, rLl, rFo; // Inuteis mas necessários para funcionar
 
 
   SC_CTOR(roteador)
-    : bN("BN"), bS("BS"), bL("BL"), bO("BO"), bC("BC"), rN("RN"), rS("RS"), 
-    rL("RL"), rO("RO"), rC("RC"), aN("AN"), aS("AS"), aL("AL"), aO("AO"), 
-    aC("AC"), mN("MN"), mS("MS"), mL("ML"), mO("MO"), mC("MC"), oN("ON"), 
-    oS("OS"), oL("OL"), oO("OO"), oC("OC") 
+    : bD("BD"), bE("BE"), bL("BL"), bF("BF"), rD("RD"), rE("RE"), 
+    rL("RL"), rF("RF"), aD("AD"), aE("AE"), aL("AL"), aF("AF"), 
+    mD("MD"), mE("ME"), mL("ML"), mF("MF"), oD("FD"), 
+    oE("FE"), oL("FL"), oF("FF")
   {
 
     //Associação de entradas de fios
-    oN.res(oNr);
-    oS.res(oSr);
+    oD.res(oDr);
+    oE.res(oEr);
     oL.res(oLr);
-    oO.res(oOr);
-    oC.res(oCr);
+    oF.res(oFr);
 
-    bN.dataOut(bNo);
-    bS.dataOut(bSo);
+    bD.dataOut(bDo);
+    bE.dataOut(bEo);
     bL.dataOut(bLo);
-    bO.dataOut(bOo);
-    bC.dataOut(bCo);
+    bF.dataOut(bFo);
 
-    aN.muxMude1(aNm1);
-    aN.muxMude2(aNm2);
-    aN.muxMude3(aNm3);
-    aS.muxMude1(aSm1);
-    aS.muxMude2(aSm2);
-    aS.muxMude3(aSm3);
+    aD.muxMude1(aDm1);
+    aD.muxMude2(aDm2);
+    aD.muxMude3(aDm3);
+    aE.muxMude1(aEm1);
+    aE.muxMude2(aEm2);
+    aE.muxMude3(aEm3);
     aL.muxMude1(aLm1);
     aL.muxMude2(aLm2);
     aL.muxMude3(aLm3);
-    aO.muxMude1(aOm1);
-    aO.muxMude2(aOm2);
-    aO.muxMude3(aOm3);
-    aC.muxMude1(aCm1);
-    aC.muxMude2(aCm2);
-    aC.muxMude3(aCm3);
+    aF.muxMude1(aFm1);
+    aF.muxMude2(aFm2);
+    aF.muxMude3(aFm3);
 
-    aN.env1(aNe1);
-    aN.env2(aNe2);
-    aN.env3(aNe3);
-    aN.env4(aNe4);
-    aS.env1(aSe1);
-    aS.env2(aSe2);
-    aS.env3(aSe3);
-    aS.env4(aSe4);
+    aD.env1(aDe1);
+    aD.env2(aDe2);
+    aD.env3(aDe3);
+    aD.env4(aDe4);
+    aE.env1(aEe1);
+    aE.env2(aEe2);
+    aE.env3(aEe3);
+    aE.env4(aEe4);
     aL.env1(aLe1);
     aL.env2(aLe2);
     aL.env3(aLe3);
     aL.env4(aLe4);
-    aO.env1(aOe1);
-    aO.env2(aOe2);
-    aO.env3(aOe3);
-    aO.env4(aOe4);
-    aC.env1(aCe1);
-    aC.env2(aCe2);
-    aC.env3(aCe3);
-    aC.env4(aCe4);
+    aF.env1(aFe1);
+    aF.env2(aFe2);
+    aF.env3(aFe3);
+    aF.env4(aFe4);
 
-    mN.eop(mNeop);
-    mS.eop(mSeop);
+    mD.eop(mDeop);
+    mE.eop(mEeop);
     mL.eop(mLeop);
-    mO.eop(mOeop);
-    mC.eop(mCeop);
+    mF.eop(mFeop);
 
-    rN.S(rNs);
-    rN.L(rNl);
-    rN.O(rNo);
-    rN.C(rNc);
-    rS.N(rSn);
-    rS.L(rSl);
-    rS.O(rSo);
-    rS.C(rSc);
-    rL.S(rLs);
-    rL.N(rLn);
-    rL.O(rLo);
-    rL.C(rLc);
-    rO.S(rOs);
-    rO.L(rOl);
-    rO.N(rOn);
-    rO.C(rOc);
-    rC.S(rCs);
-    rC.L(rCl);
-    rC.O(rCo);
-    rC.N(rCn);
+    rD.E(rDs);
+    rD.L(rDl);
+    rD.F(rDo);
+    rE.D(rEn);
+    rE.L(rEl);
+    rE.F(rEo);
+    rL.E(rLs);
+    rL.D(rLn);
+    rL.F(rLo);
+    rF.E(rFs);
+    rF.L(rFl);
+    rF.D(rFn);
 
-    //Necessários para funcionar
-    rN.N(rNn);
-    rS.S(rSs);
+    //Decessários para funcionar
+    rD.D(rDn);
+    rE.E(rEs);
     rL.L(rLl);
-    rO.O(rOo);
-    rC.C(rCc);
+    rF.F(rFo);
 
-    // Norte ------------------------------------------------------------------
-    bN.enable(enableN);
+    // Direita ----------------------------------------------------------------
+
+    bD.enable(enableD);
 
     //recebe a sinalização para enviar da porta de saída or associada a ele
-    bN.send(oNr); 
+    bD.send(oDr); 
 
     // Recebe flits pelo norte
-    bN.dataIn1(dataInN1);
-    bN.dataIn2(dataInN2);
-    bN.dataIn3(dataInN3);
-    bN.dataIn4(dataInN4);
-    bN.dataIn5(dataInN5);
-    bN.dataIn6(dataInN6);
-    bN.dataIn7(dataInN7);
-    bN.dataIn8(dataInN8);
+    bD.dataIn1(dataInD1);
+    bD.dataIn2(dataInD2);
+    bD.dataIn3(dataInD3);
+    bD.dataIn4(dataInD4);
+    bD.dataIn5(dataInD5);
+    bD.dataIn6(dataInD6);
+    bD.dataIn7(dataInD7);
+    bD.dataIn8(dataInD8);
 
     //Recebe flits para saber se é cabeçalho e para onde vai
-    rN.dataIn(bNo);
-    rN.clk(clk);
+    rD.dataIn(bDo);
+    rD.clk(clk);
 
     //Recebe o seletor do árbitro norte
-    mN.X1(aNm1);
-    mN.X2(aNm2);
-    mN.X3(aNm3);
+    mD.X1(aDm1);
+    mD.X2(aDm2);
+    mD.X3(aDm3);
 
-    mN.A(bSo);//Recebe flits do buffer sul
-    mN.B(bLo);//Recebe flits do buffer leste
-    mN.C(bOo);//Recebe flits do buffer oeste
-    mN.D(bCo);//Recebe flits do buffer central
-    mN.res(dataOutN);//Saída dos flits pelo mux norte
+    mD.A(bEo);//Recebe flits do buffer sul
+    mD.B(bLo);//Recebe flits do buffer leste
+    mD.C(bFo);//Recebe flits do buffer oeste
+    mD.res(dataOutD);//Eaída dos flits pelo mux norte
 
-    oN.A(aSe1);//Recebe sinal para ler arquivos no buffer norte do árbitro sul
-    oN.B(aLe1);//Recebe sinal para ler arquivos no buffer norte do árbitro leste
-    oN.C(aOe1);//Recebe sinal para ler arquivos no buffer norte do árbitro oeste
-    oN.D(aCe1);//Recebe sinal para ler arquivos no buffer norte do árbitro central
+    oD.A(aEe1);//Recebe sinal para ler arquivos no buffer norte do árbitro sul
+    oD.B(aLe1);//Recebe sinal para ler arquivos no buffer norte do árbitro leste
+    oD.C(aFe1);//Recebe sinal para ler arquivos no buffer norte do árbitro oeste
 
-    aN.clk(clk);
-    aN.eop(mNeop);//Recebe o fim de pacote pelo mux
+    aD.clk(clk);
+    aD.eop(mDeop);//Recebe o fim de pacote pelo mux
     //Recebe as requisições das outras portas de entrada pelo fio instanciado como mostrado a seguir:
-    aN.reqIn1(rSn); //Recebe requisição do sul
-    aN.reqIn2(rLn); //Recebe requisição do leste
-    aN.reqIn3(rOn); //Recebe requisição do oeste
-    aN.reqIn4(rCn); //Recebe requisição do centro
+    aD.reqIn1(rEn); //Recebe requisição do sul
+    aD.reqIn2(rLn); //Recebe requisição do leste
+    aD.reqIn3(rFn); //Recebe requisição do oeste
 
-    //Sul
-    bS.enable(enableS);
-    bS.send(oSr); //recebe a sinaliação para enviar da porta de saída or associada a ele
+    // Esquerda ---------------------------------------------------------------
+
+    bE.enable(enableE);
+    bE.send(oEr); //recebe a sinaliação para enviar da porta de saída or associada a ele
     //Recebe flits pelo sul
-    bS.dataIn1(dataInS1);
-    bS.dataIn2(dataInS2);
-    bS.dataIn3(dataInS3);
-    bS.dataIn4(dataInS4);
-    bS.dataIn5(dataInS5);
-    bS.dataIn6(dataInS6);
-    bS.dataIn7(dataInS7);
-    bS.dataIn8(dataInS8);
+    bE.dataIn1(dataInE1);
+    bE.dataIn2(dataInE2);
+    bE.dataIn3(dataInE3);
+    bE.dataIn4(dataInE4);
+    bE.dataIn5(dataInE5);
+    bE.dataIn6(dataInE6);
+    bE.dataIn7(dataInE7);
+    bE.dataIn8(dataInE8);
 
-    rS.dataIn(bSo);//Recebe flits para saber se é cabeçalho e para onde vai
-    rS.clk(clk);
+    rE.dataIn(bEo);//Recebe flits para saber se é cabeçalho e para onde vai
+    rE.clk(clk);
 
     //Recebe o seletor do árbitro sul
-    mS.X1(aSm1);
-    mS.X2(aSm2);
-    mS.X3(aSm3);
-    mS.A(bNo);//Recebe flits do buffer norte
-    mS.B(bLo);//Recebe flits do buffer leste
-    mS.C(bOo);//Recebe flits do buffer oeste
-    mS.D(bCo);//Recebe flits do buffer central
-    mS.res(dataOutS);//Saída dos flits pelo mux sul
+    mE.X1(aEm1);
+    mE.X2(aEm2);
+    mE.X3(aEm3);
+    mE.A(bDo);//Recebe flits do buffer norte
+    mE.B(bLo);//Recebe flits do buffer leste
+    mE.C(bFo);//Recebe flits do buffer oeste
+    mE.res(dataOutE);//Eaída dos flits pelo mux sul
 
-    oS.A(aNe1);//Recebe sinal para ler arquivos no buffer sul do árbitro norte
-    oS.B(aLe2);//Recebe sinal para ler arquivos no buffer sul do árbitro leste
-    oS.C(aOe2);//Recebe sinal para ler arquivos no buffer sul do árbitro oeste
-    oS.D(aCe2);//Recebe sinal para ler arquivos no buffer sul do árbitro central
+    oE.A(aDe1);//Recebe sinal para ler arquivos no buffer sul do árbitro norte
+    oE.B(aLe2);//Recebe sinal para ler arquivos no buffer sul do árbitro leste
+    oE.C(aFe2);//Recebe sinal para ler arquivos no buffer sul do árbitro oeste
 
-    aS.clk(clk);
-    aS.eop(mSeop);//Recebe o fim de pacote pelo mux
+    aE.clk(clk);
+    aE.eop(mEeop);//Recebe o fim de pacote pelo mux
     //Recebe as requisições das outras portas de entrada pelo fio instanciado como mostrado a seguir:
-    aS.reqIn1(rNs); //Recebe requisição do norte
-    aS.reqIn2(rLs); //Recebe requisição do leste
-    aS.reqIn3(rOs); //Recebe requisição do oeste
-    aS.reqIn4(rCs); //Recebe requisição do centro
+    aE.reqIn1(rDs); //Recebe requisição do norte
+    aE.reqIn2(rLs); //Recebe requisição do leste
+    aE.reqIn3(rFs); //Recebe requisição do oeste
 
-    //Leste
+    // Local ------------------------------------------------------------------
+
     bL.enable(enableL);
     bL.send(oLr); //recebe a sinalização para enviar da porta de saída or associada a ele
     //Recebe flits pelo leste
@@ -230,114 +207,68 @@ SC_MODULE(roteador) {
     mL.X1(aLm1);
     mL.X2(aLm2);
     mL.X3(aLm3);
-    mL.A(bNo);//Recebe flits do buffer norte
-    mL.B(bSo);//Recebe flits do buffer sul
-    mL.C(bOo);//Recebe flits do buffer oeste
-    mL.D(bCo);//Recebe flits do buffer central
-    mL.res(dataOutL);//Saída dos flits pelo mux leste
+    mL.A(bDo);//Recebe flits do buffer norte
+    mL.B(bEo);//Recebe flits do buffer sul
+    mL.C(bFo);//Recebe flits do buffer oeste
+    mL.res(dataOutL);//Eaída dos flits pelo mux leste
 
-    oL.A(aNe2);//Recebe sinal para ler arquivos no buffer leste do árbitro norte
-    oL.B(aSe2);//Recebe sinal para ler arquivos no buffer leste do árbitro sul
-    oL.C(aOe3);//Recebe sinal para ler arquivos no buffer leste do árbitro oeste
-    oL.D(aCe3);//Recebe sinal para ler arquivos no buffer leste do árbitro central
+    oL.A(aDe2);//Recebe sinal para ler arquivos no buffer leste do árbitro norte
+    oL.B(aEe2);//Recebe sinal para ler arquivos no buffer leste do árbitro sul
+    oL.C(aFe3);//Recebe sinal para ler arquivos no buffer leste do árbitro oeste
 
     aL.clk(clk);
     aL.eop(mLeop);//Recebe o fim de pacote pelo mux
     //Recebe as requisições das outras portas de entrada pelo fio instanciado como mostrado a seguir:
-    aL.reqIn1(rNl); //Recebe requisição do norte
-    aL.reqIn2(rSl); //Recebe requisição do sul
-    aL.reqIn3(rOl); //Recebe requisição do oeste
-    aL.reqIn4(rCl); //Recebe requisição do centro
+    aL.reqIn1(rDl); //Recebe requisição do norte
+    aL.reqIn2(rEl); //Recebe requisição do sul
+    aL.reqIn3(rFl); //Recebe requisição do oeste
 
-    //Oeste
-    bO.enable(enableO);
-    bO.send(oOr); //recebe a sinalização para enviar da porta de saída or associada a ele
+    // Frente -----------------------------------------------------------------
+
+    bF.enable(enableF);
+    bF.send(oFr); //recebe a sinalização para enviar da porta de saída or associada a ele
     //Recebe flits pelo oeste
-    bO.dataIn1(dataInO1);
-    bO.dataIn2(dataInO2);
-    bO.dataIn3(dataInO3);
-    bO.dataIn4(dataInO4);
-    bO.dataIn5(dataInO5);
-    bO.dataIn6(dataInO6);
-    bO.dataIn7(dataInO7);
-    bO.dataIn8(dataInO8);
+    bF.dataIn1(dataInF1);
+    bF.dataIn2(dataInF2);
+    bF.dataIn3(dataInF3);
+    bF.dataIn4(dataInF4);
+    bF.dataIn5(dataInF5);
+    bF.dataIn6(dataInF6);
+    bF.dataIn7(dataInF7);
+    bF.dataIn8(dataInF8);
 
-    rO.dataIn(bOo);//Recebe flits para saber se é cabeçalho e para onde vai
-    rO.clk(clk);
+    rF.dataIn(bFo);//Recebe flits para saber se é cabeçalho e para onde vai
+    rF.clk(clk);
 
     //Recebe o seletor do árbitro oeste
-    mO.X1(aOm1);
-    mO.X2(aOm2);
-    mO.X3(aOm3);
-    mO.A(bNo);//Recebe flits do buffer norte
-    mO.B(bSo);//Recebe flits do buffer sul
-    mO.C(bLo);//Recebe flits do buffer leste
-    mO.D(bCo);//Recebe flits do buffer central
-    mO.res(dataOutO);//Saída dos flits pelo mux oeste
+    mF.X1(aFm1);
+    mF.X2(aFm2);
+    mF.X3(aFm3);
+    mF.A(bDo);//Recebe flits do buffer norte
+    mF.B(bEo);//Recebe flits do buffer sul
+    mF.C(bLo);//Recebe flits do buffer leste
+    mF.res(dataOutF);//Eaída dos flits pelo mux oeste
 
-    oO.A(aNe3);//Recebe sinal para ler arquivos no buffer oeste do árbitro norte
-    oO.B(aSe3);//Recebe sinal para ler arquivos no buffer oeste do árbitro sul
-    oO.C(aLe3);//Recebe sinal para ler arquivos no buffer oeste do árbitro oeste
-    oO.D(aCe4);//Recebe sinal para ler arquivos no buffer oeste do árbitro central
+    oF.A(aDe3);//Recebe sinal para ler arquivos no buffer oeste do árbitro norte
+    oF.B(aEe3);//Recebe sinal para ler arquivos no buffer oeste do árbitro sul
+    oF.C(aLe3);//Recebe sinal para ler arquivos no buffer oeste do árbitro oeste
 
-    aO.clk(clk);
-    aO.eop(mOeop);//Recebe o fim de pacote pelo mux
+    aF.clk(clk);
+    aF.eop(mFeop);//Recebe o fim de pacote pelo mux
     //Recebe as requisições das outras portas de entrada pelo fio instanciado como mostrado a seguir:
-    aO.reqIn1(rNo); //Recebe requisição do norte
-    aO.reqIn2(rSo); //Recebe requisição do sul
-    aO.reqIn3(rLo); //Recebe requisição do leste
-    aO.reqIn4(rCo); //Recebe requisição do centro
+    aF.reqIn1(rDo); //Recebe requisição do norte
+    aF.reqIn2(rEo); //Recebe requisição do sul
+    aF.reqIn3(rLo); //Recebe requisição do leste
 
-    //Centro
-    bC.enable(enableC);
-    bC.send(oCr); //recebe a sinalização para enviar da porta de saída or associada a ele
-    //Recebe flits pelo centro
-    bC.dataIn1(dataInC1);
-    bC.dataIn2(dataInC2);
-    bC.dataIn3(dataInC3);
-    bC.dataIn4(dataInC4);
-    bC.dataIn5(dataInC5);
-    bC.dataIn6(dataInC6);
-    bC.dataIn7(dataInC7);
-    bC.dataIn8(dataInC8);
-
-    rC.dataIn(bCo);//Recebe flits para saber se é cabeçalho e para onde vai
-    rC.clk(clk);
-
-    //Recebe o seletor do árbitro central
-    mC.X1(aCm1);
-    mC.X2(aCm2);
-    mC.X3(aCm3);
-    mC.A(bNo);//Recebe flits do buffer norte
-    mC.B(bSo);//Recebe flits do buffer sul
-    mC.C(bLo);//Recebe flits do buffer leste
-    mC.D(bOo);//Recebe flits do buffer oeste
-    mC.res(dataOutC);//Saída dos flits pelo mux central
-
-    oC.A(aNe4);//Recebe sinal para ler arquivos no buffer central do árbitro norte
-    oC.B(aSe4);//Recebe sinal para ler arquivos no buffer central do árbitro sul
-    oC.C(aLe4);//Recebe sinal para ler arquivos no buffer central do árbitro leste
-    oC.D(aOe4);//Recebe sinal para ler arquivos no buffer central do árbitro oeste
-
-    aC.clk(clk);
-    aC.eop(mCeop);//Recebe o fim de pacote pelo mux
-    //Recebe as requisições das outras portas de entrada pelo fio instanciado como mostrado a seguir:
-    aC.reqIn1(rNc); //Recebe requisição do norte
-    aC.reqIn2(rSc); //Recebe requisição do sul
-    aC.reqIn3(rLc); //Recebe requisição do leste
-    aC.reqIn4(rOc); //Recebe requisição do oeste
-
-    bN.clk(clk);
-    bS.clk(clk);
+    bD.clk(clk);
+    bE.clk(clk);
     bL.clk(clk);
-    bO.clk(clk);
-    bC.clk(clk);
+    bF.clk(clk);
 
-    mN.clk(clk);
-    mS.clk(clk);
+    mD.clk(clk);
+    mE.clk(clk);
     mL.clk(clk);
-    mO.clk(clk);
-    mC.clk(clk);
+    mF.clk(clk);
 
     sensitive << clk;
   }
