@@ -6,17 +6,12 @@
 #include "modules/memdetest.h"
 
 int sc_main(int argc, char* argv[]) {
-  sc_clock TestClk("TestClock", SC_NS);
-  
+  sc_clock clock("clock", 100, SC_NS, 0.5);
+
   //Instanciando roteador, componentes de teste e o testbench
-  roteador rot("roteador");
-  memdetest memN("memn");
-  memdetest memS("mems");
-  memdetest memL("meml");
-  memdetest memO("memo");
-  memdetest memC("memc");
-  testbench Tb("Testbench");
-  
+  roteador rot("router");
+  testbench Tb("testbench");
+
   //Instanciando fios
   sc_signal<bool> eN, eS, eL, eO, eC;
   sc_signal<bool> dN1[6], dN2[6], dN3[6], dN4[6], dN5[6], dN6[6], dN7[6], dN8[6];
@@ -25,17 +20,17 @@ int sc_main(int argc, char* argv[]) {
   sc_signal<bool> dO1[6], dO2[6], dO3[6], dO4[6], dO5[6], dO6[6], dO7[6], dO8[6];
   sc_signal<bool> dC1[6], dC2[6], dC3[6], dC4[6], dC5[6], dC6[6], dC7[6], dC8[6];
   sc_signal<bool> doN[6], doS[6], doL[6], doO[6], doC[6];
-  
+
   //Conectando fios
-  rot.clk(TestClk);
-  Tb.Clk(TestClk);
-  
+  rot.clk(clock);
+  Tb.Clk(clock);
+
   Tb.eN(eN);
   Tb.eS(eS);
   Tb.eL(eL);
   Tb.eO(eO);
   Tb.eC(eC);
-  
+
   for(short x = 0; x < 6; x++) {
 
     Tb.dN1[x](dN1[x]);
@@ -127,64 +122,41 @@ int sc_main(int argc, char* argv[]) {
     rot.dataInC6[x](dC6[x]);
     rot.dataInC7[x](dC7[x]);
     rot.dataInC8[x](dC8[x]);
-    
+
   }
-  
+
   rot.enableN(eN);
   rot.enableS(eS);
   rot.enableL(eL);
   rot.enableO(eO);
   rot.enableC(eC);
-  
+
   for(short x = 0; x < 6; x++) {
-  
+
     rot.dataOutN[x](doN[x]);
     rot.dataOutS[x](doS[x]);
     rot.dataOutL[x](doL[x]);
     rot.dataOutO[x](doO[x]);
     rot.dataOutC[x](doC[x]);
 
-    memN.dataIn[x](doN[x]);
-    memS.dataIn[x](doS[x]);
-    memL.dataIn[x](doL[x]);
-    memO.dataIn[x](doO[x]);
-    memC.dataIn[x](doC[x]);
-  
   }
-  
-  memN.clk(TestClk);
-  memS.clk(TestClk);
-  memL.clk(TestClk);
-  memO.clk(TestClk);
-  memC.clk(TestClk);
-  
-  
-  //Inicialização dos testes
-  ///========================= waveform
+
+  // Waves --------------------------------------------------------------------
+
   sc_trace_file *fp;
   fp=sc_create_vcd_trace_file("wave");
   fp->set_time_unit(1, sc_core::SC_NS);
-  sc_trace(fp,TestClk,"CLK");
-  //=========================
+
+  sc_trace(fp, clock, "clock");
+
+  for(short x = 0; x < 6; x++) {
+    sc_trace(fp, rot.dataInN1[x],"router|dataInN1|" + std::to_string(x));
+    sc_trace(fp, rot.dataOutS[x],"router|dataOutS|" + std::to_string(x));
+  }
+
   sc_start();
-  
+
   sc_close_vcd_trace_file(fp);
-  
-  cout<<"mem do sul"<<endl;
-  for(short y = 0; y < 16; y++) {
-    for(short x = 0; x < 6; x++) {
-      cout<<memS.dados[y][x];
-    }
-    cout<<endl;
-  }
-  
-  cout<<"mem do centro"<<endl;
-  for(short y = 0; y < 16; y++) {
-    for(short x = 0; x < 6; x++) {
-      cout<<memC.dados[y][x];
-    }
-    cout<<endl;
-  }
-	
+
   return 0;
 }
